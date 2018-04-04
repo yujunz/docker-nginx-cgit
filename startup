@@ -7,7 +7,9 @@ if [ -z "$FCGI_CHILDREN" ]; then
     FCGI_CHILDREN=$(nproc)
 fi
 
-envsubst "$CGIT_VARS" < /etc/cgitrc.template > /etc/cgitrc
+if [ ! -f /etc/cgitrc ]; then
+    envsubst "$CGIT_VARS" < /etc/cgitrc.template > /etc/cgitrc
+fi
 
 /usr/bin/spawn-fcgi -F $FCGI_CHILDREN -M 666 -s /var/run/fcgiwrap.socket /usr/sbin/fcgiwrap
 
